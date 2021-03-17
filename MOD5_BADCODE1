@@ -1,0 +1,71 @@
+//========================SOF================
+
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+sem_t my_sem;
+
+void * Print_x(void * a)
+{
+	printf("Print x\n");	
+}
+
+void * Print_y(void * a)
+{
+
+	printf("Print y\n");
+}
+
+
+void * Print_z(void * a)
+{
+	printf("Print z\n");
+}
+
+int main(int argc, char * argv[])
+{
+    pthread_t tid1, tid2, tid3;
+
+    if(pthread_create(&tid1, NULL, Print_x, NULL))
+    {
+      printf("\n Eror! tidak bisa membuat thread 1");
+      exit(1);
+    }
+
+    if(pthread_create(&tid2, NULL, Print_y, NULL))
+    {
+      printf("\n Eror! tidak bisa membuat thread 2");
+      exit(1);
+    }
+
+	if(pthread_create(&tid3, NULL, Print_z, NULL))
+    {
+      printf("\n Eror! tidak bisa membuat thread 3");
+      exit(1);
+    }
+
+    if(pthread_join(tid1, NULL))	
+    {
+      printf("\n Eror, join thread");
+      exit(1);
+    }
+
+    if(pthread_join(tid2, NULL))        
+    {
+      printf("\n Eror join thread");
+      exit(1);
+    }
+
+	
+    if(pthread_join(tid3, NULL))        
+    {
+      printf("\n Eror join thread");
+      exit(1);
+    }
+
+    pthread_exit(NULL);
+}
+
+//========================EOF================
