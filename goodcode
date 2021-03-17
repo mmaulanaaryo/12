@@ -1,0 +1,62 @@
+//========================SOF================
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define COUNT 1000000
+
+int cnt = 0;
+sem_t my_mutex;
+
+void * Count(void * a)
+{
+
+    int i, tmp;
+    for(i = 0; i < COUNT; i++)
+    {
+        tmp = cnt;      
+        tmp = tmp+1;    
+        cnt = tmp;      
+    }
+
+}
+
+int main(int argc, char * argv[])
+{
+    pthread_t tid1, tid2;
+
+
+    if(pthread_create(&tid1, NULL, Count, NULL))
+    {
+      printf("\n Eror! tidak bisa membuat thread 1");
+      exit(1);
+    }
+
+    if(pthread_create(&tid2, NULL, Count, NULL))
+    {
+      printf("\n Eror! tidak bisa membuat thread 2");
+      exit(1);
+    }
+
+    if(pthread_join(tid1, NULL))	
+    {
+      printf("\n Eror, join thread");
+      exit(1);
+    }
+
+    if(pthread_join(tid2, NULL))        
+    {
+      printf("\n Eror join thread");
+      exit(1);
+    }
+
+    if (cnt < 2 * COUNT) 
+        printf("\n NOT OK! cnt = [%d], seharusnya %d\n", cnt, 2*COUNT);
+    else
+        printf("\n OK! cnt = [%d]\n", cnt);
+  
+    pthread_exit(NULL);
+}
+
+//========================EOF================
